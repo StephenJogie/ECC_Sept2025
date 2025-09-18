@@ -5,7 +5,8 @@
 #include<random>
 #include<ctime> //quick solution to seed rand without needing to spend time
 #include<vector>
-//Small note, it would be very very funny if I got my cpp program to interface with with console and use the rust rand proj
+//test change
+//Small note, it would be very very funny if I got my cpp program to interface with the rust rand proj
 #define COL_SIZE 8
 #define ROW_SIZE 8
 /*
