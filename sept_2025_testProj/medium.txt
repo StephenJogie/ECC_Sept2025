@@ -1,1 +1,21 @@
-test q medium
+Do you like anime?
+How old are you?
+What do you like?
+How many dogs are in this picture (PICTURE1)
+Do you have a sibling?
+What colour do you like?
+Do you have a pet?
+Do you like sushi?
+Is your birthday in fall?
+Can you play an instrument?
+How many languages do you speak?
+Do you like potatoes?
+Have you been to Akihabara?
+How do you get to Akihabara? (PICTURE2)
+Why do you go to Akihabara? (PICTURE3)
+When do you go to Akihabara? (PICTURE4 - Seasons)
+Where are you from?
+Can you swim?
+What instrument can you play?
+Do you like reading?
+When is your birthday? (CALENDAR)
