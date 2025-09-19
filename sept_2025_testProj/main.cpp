@@ -28,6 +28,9 @@ private:
   std::string name = "unName"; //32 character limit for the player name
   int qAnsCnt = 0; //this is the number of questions that they have gotten,
 public:
+  bool didWin() {
+    return (pos[0] >= ROW_SIZE);
+  }
   pObj(int id)
   {
     //set pID for the object
@@ -36,7 +39,7 @@ public:
   }
   void initName() 
   {
-    std::cout << "PlayerName = ";
+    std::cout << "Player " << pID << " Name = ";
     std::cin >> name;
     std::cout << std::endl << "Thank you " << "\t" << name << std::endl;
     return;
@@ -77,11 +80,9 @@ public:
   std::string useQuestion(int qDiff)
   {
     int qInd = rand() % (qCnt[qDiff]);
-    switch(qCnt[qDiff]>=1) {
-    case (true):
-      //
-      
-      
+    
+    if (qCnt[qDiff] >= 1)
+    {
       std::cout << "QUESTION: " << "\n \n \n \n";
       std::cout << question[qDiff][qInd] << "\n" << "\n";
       question[3].push_back(question[qDiff][qInd]);
@@ -89,12 +90,15 @@ public:
       qCnt[qDiff] -= 1;
       qCnt[3] += 1;
       return(question[3][qCnt[3] - 1]);
-    case (false):
+    }
+    else {
       //depleted the questions, need to make up on the spot but the game must continue
       std::cout << "QUESTION: " << "\n \n \n \n";
       std::cout << "OUT OF QUESTIONS!!! GAMEMASTER PLEASE DO SOMETHING!!!!" << "\n" << "\n";
       return("OUT OF QUESTIONS!!! GAMEMASTER PLEASE DO SOMETHING!!!!");
     }
+   
+    
     
   }
   void printQuestions()
@@ -153,7 +157,7 @@ int rollDice() {
   std::cout << "WHAT VALUE DID YOU ROLL: ";
   int retVal = 0;
   std::cin >> retVal;
-  std::cout << "UNDERSTOOD ... " << std::endl;
+  std::cout << "UNDERSTOOD ... " << retVal << "..." << std::endl;
   return retVal;
 }
 void playQuestion(pObj* player, int numPlayers, qPool* q, int qDiff)
@@ -165,22 +169,22 @@ void playQuestion(pObj* player, int numPlayers, qPool* q, int qDiff)
   int moveVal = rollDice();
   q->useQuestion(qDiff); // difficulty easy
   while (!val) {
-    std::cout << "Did " << player->retName() << " answer correctly (y/n) : ";
-    char cTemp;
-    std::cin >> cTemp;
-    switch (cTemp) {
-    case 'y':
-      // I want to add to the player score
-      player->updateScore(1);
-      player->updatePos(moveVal);
-      val = true;
-    case 'n':
-      //
-      player->updateScore(0);
-      val = true;
-    default:
+    std::cout << "Did " << player->retName() << " answer correctly ( y(1) / n(0) ) :";
+    int temp;
+    std::cin >> temp;
+    
+    
+    if (temp != 1 && temp != 0)
+    {
       std::cout << "INVALID ENTRY" << "\n";
     }
+    else {
+      // I want to add to the player score
+      player->updateScore(temp);
+      player->updatePos(moveVal * temp);
+      val = true;
+    }
+    player->dispPos();
   }
 
   return;
@@ -192,6 +196,8 @@ void displayGameStatus(std::vector<pObj*> players, int numPlayers, int turnNum)
   std::cout << "\t \t" << "TURN " << turnNum << " STATUS: \n";
   //Position display
   for (int i = 0; i < numPlayers; i++) {
+    std::cout << "\t" << players[i]->retName() << std::endl; 
+
     players[i]->dispPos();
   }
 
@@ -201,13 +207,22 @@ void initGamePlayers(std::vector<pObj*> players, int numPlayers)
 {
   //Get the player names for all of the players that are playing
   //Also, display the current player positions
+  for (int i = 0; i < numPlayers; i++) {
+    players[i]->initName();
+  }
 }
-int game(std::vector<pObj>* players, int numPlayers, qPool* questions) 
+int game(std::vector<pObj*> players, int numPlayers, qPool* questions) 
 {
   //I want to directly modify the variables in memory (actually do I really want to?)
   /*
   General program loop would be,
   I have the player turn order (to have been decided in the creation of the player IDs*/
+  initGamePlayers(players, numPlayers);
+  bool done = 0; 
+  while (!done)
+  {
+
+  }
   return 0;
 }
 
