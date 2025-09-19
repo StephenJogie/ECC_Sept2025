@@ -76,11 +76,11 @@ private:
 public:
   std::string useQuestion(int qDiff)
   {
-    
+    int qInd = rand() % (qCnt[qDiff]);
     switch(qCnt[qDiff]>=1) {
     case (true):
       //
-      int qInd = rand() % (qCnt[qDiff]);
+      
       
       std::cout << "QUESTION: " << "\n \n \n \n";
       std::cout << question[qDiff][qInd] << "\n" << "\n";
@@ -118,7 +118,7 @@ public:
     ///char temp[1024];
     std::string tempS;
     int cCnt;
-    std::string fName = {"easy.txt","medium.txt","hard.txt","used.txt" };
+    std::string fName[4] = {"easy.txt","medium.txt","hard.txt","used.txt"};
     for (int i = 0; i < 4; i++) {
 
       std::fstream f(fName[i]);
