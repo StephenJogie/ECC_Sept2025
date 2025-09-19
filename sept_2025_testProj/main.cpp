@@ -2,6 +2,7 @@
 #include<cmath>
 #include<string>
 #include<fstream>
+#include<cstdlib>
 #include<random>
 #include<ctime> //quick solution to seed rand without needing to spend time
 #include<vector>
@@ -24,7 +25,7 @@ private:
   int pID = 0;// this is the player id, should be unique 
   int score = 0; //probably better to be a uint
   int pos[2] = { 0,0 }; // row,col
-  char name[32] = "unNamed"; //32 character limit for the player name
+  std::string name = "unName"; //32 character limit for the player name
   int qAnsCnt = 0; //this is the number of questions that they have gotten,
 public:
   pObj(int id)
@@ -53,6 +54,15 @@ public:
     std::cout << name << " = " << "\t" << "row = " << pos[0] << "\t" << "col = " << pos[1] << std::endl;
     return;
   }
+
+  std::string retName() {
+    return name;
+  }
+  void updateScore(bool isCorrect)
+  {
+    score += isCorrect; 
+    qAnsCnt += 1;;
+  }
 };
 
 class qPool {
@@ -64,10 +74,33 @@ private:
   int qCnt[4] = { 0,0,0,0 }; //keep count of questions remaining and whatnot for when popping
 
 public:
+  std::string useQuestion(int qDiff)
+  {
+    
+    switch(qCnt[qDiff]>=1) {
+    case (true):
+      //
+      int qInd = rand() % (qCnt[qDiff]);
+      
+      std::cout << "QUESTION: " << "\n \n \n \n";
+      std::cout << question[qDiff][qInd] << "\n" << "\n";
+      question[3].push_back(question[qDiff][qInd]);
+      question[qDiff][qInd].pop_back();
+      qCnt[qDiff] -= 1;
+      qCnt[3] += 1;
+      return(question[3][qCnt[3] - 1]);
+    case (false):
+      //depleted the questions, need to make up on the spot but the game must continue
+      std::cout << "QUESTION: " << "\n \n \n \n";
+      std::cout << "OUT OF QUESTIONS!!! GAMEMASTER PLEASE DO SOMETHING!!!!" << "\n" << "\n";
+      return("OUT OF QUESTIONS!!! GAMEMASTER PLEASE DO SOMETHING!!!!");
+    }
+    
+  }
   void printQuestions()
   {
     //FOR DEBUGGING mainly
-    std::string qDiff[4] = { "easy","medium","hard","used" };
+    std::string qDiff[4] = {"easy","medium","hard","used"};
     int tempSize = 0;
     for (int i = 0; i < 4; i++) {
       std::cout << "\n \n" << qDiff[i] << ": " << qCnt[i] << " QUESTIONS" << "\n";
@@ -85,7 +118,7 @@ public:
     ///char temp[1024];
     std::string tempS;
     int cCnt;
-    std::string fName[4] = { "easy.txt","medium.txt","hard.txt","used.txt" };
+    std::string fName = {"easy.txt","medium.txt","hard.txt","used.txt" };
     for (int i = 0; i < 4; i++) {
 
       std::fstream f(fName[i]);
@@ -111,11 +144,47 @@ public:
     printQuestions();
     return;
   }
-  void useQuestion(int diff) 
-  {
-    return;
-  }
+  
 };
+int rollDice() {
+  //I would like to automate it but unfortunately I think that the target audience would rather roll real dice
+  //prompt to input the value.
+  //I am trusting that it is a valid input
+  std::cout << "WHAT VALUE DID YOU ROLL: ";
+  int retVal = 0;
+  std::cin >> retVal;
+  std::cout << "UNDERSTOOD ... " << std::endl;
+  return retVal;
+}
+void playQuestion(pObj* player, int numPlayers, qPool* q, int qDiff)
+{
+  //FOR THIS VERSION ONLY EASY
+  
+
+  bool val = 0;
+  int moveVal = rollDice();
+  q->useQuestion(qDiff); // difficulty easy
+  while (!val) {
+    std::cout << "Did " << player->retName() << " answer correctly (y/n) : ";
+    char cTemp;
+    std::cin >> cTemp;
+    switch (cTemp) {
+    case 'y':
+      // I want to add to the player score
+      player->updateScore(1);
+      player->updatePos(moveVal);
+      val = true;
+    case 'n':
+      //
+      player->updateScore(0);
+      val = true;
+    default:
+      std::cout << "INVALID ENTRY" << "\n";
+    }
+  }
+
+  return;
+}
 void displayGameStatus(std::vector<pObj*> players, int numPlayers, int turnNum)
 {
   //Display game information each round
@@ -141,7 +210,9 @@ int game(std::vector<pObj>* players, int numPlayers, qPool* questions)
   I have the player turn order (to have been decided in the creation of the player IDs*/
   return 0;
 }
+
 int main() {
+  srand(time(NULL)); //seed with time
   int numPlayers = 0; 
   std::cout << "Enter a number << ";
   std::cin >> numPlayers;
@@ -155,6 +226,7 @@ int main() {
 
   qPool q;
   q.load();
+  playQuestion(players[0], numPlayers, &q, 0);
   /*pObj* newGuy = new pObj(45);
   newGuy->initName();
   newGuy->dispPos();

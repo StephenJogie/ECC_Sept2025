@@ -23,5 +23,8 @@
     <Text Include="easy.txt">
       <Filter>Source Files</Filter>
     </Text>
+    <Text Include="medium.txt">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
