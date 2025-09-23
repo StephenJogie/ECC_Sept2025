@@ -193,7 +193,7 @@ void displayGameStatus(std::vector<pObj*> players, int numPlayers, int turnNum)
 {
   //Display game information each round
   //e.g. player positions and the score (number of questions, perhaps number of questions answered correctly)
-  std::cout << "\t \t" << "TURN " << turnNum << " STATUS: \n";
+  std::cout << "\t \t" << " END OF TURN " << turnNum << " STATUS: \n";
   //Position display
   for (int i = 0; i < numPlayers; i++) {
     std::cout << "\t" << players[i]->retName() << std::endl; 
@@ -211,19 +211,42 @@ void initGamePlayers(std::vector<pObj*> players, int numPlayers)
     players[i]->initName();
   }
 }
-int game(std::vector<pObj*> players, int numPlayers, qPool* questions) 
+void game(std::vector<pObj*> players, int numPlayers, qPool* questions) 
 {
   //I want to directly modify the variables in memory (actually do I really want to?)
   /*
   General program loop would be,
   I have the player turn order (to have been decided in the creation of the player IDs*/
+  /*
+  * Game loop is as follows 
+  * For each 'turn', all players play one question. 
+  * At the end of the turn I would be displaying the current 'state' of the game
+  * Before the turn ends and it loops into another turn, I would see if anyone 'won' the game
+  * (actually, better to break the loop as soon as someone wins)
+  * Keep looping turns until there is a winner
+  * When the game is won, I would need to display the winner
+  */
   initGamePlayers(players, numPlayers);
+  
   bool done = 0; 
+  int turn = 0;
   while (!done)
   {
-
+    std::cout << "==========================" << std::endl;
+    std::cout << "Turn " << turn << "::::: " << std::endl;
+    for (int i = 0; i < numPlayers; i++)
+    {
+      playQuestion(players[i], numPlayers, questions, 1);
+      if (players[i]->didWin()) {
+        std::cout << "WINNER" << std::endl;
+        done = 1;
+        break;
+      }
+    }
+    turn += 1;
+    displayGameStatus(players, numPlayers, turn);
   }
-  return 0;
+  return;
 }
 
 int main() {
@@ -241,7 +264,7 @@ int main() {
 
   qPool q;
   q.load();
-  playQuestion(players[0], numPlayers, &q, 0);
+  //playQuestion(players[0], numPlayers, &q, 0);
   /*pObj* newGuy = new pObj(45);
   newGuy->initName();
   newGuy->dispPos();
@@ -250,5 +273,6 @@ int main() {
   newGuy->updatePos(2);
   newGuy->dispPos();
   */
+  game(players, numPlayers, &q);
   return 0;
 }

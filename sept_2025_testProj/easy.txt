@@ -2,4 +2,15 @@ this is question 1.
 this is question 2.
 this is question 3.
 this is question 4.
-merge.
+question 4.
+picture question 1. 
+picture question 2.
+picture question 3
+picture question 4
+picture question 5
+picture question 6
+picture question 7 
+picture question 8
+what is your name? 
+what school do you go to? 
+What is your favorite subject? 
