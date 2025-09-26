@@ -230,20 +230,24 @@ void game(std::vector<pObj*> players, int numPlayers, qPool* questions)
   
   bool done = 0; 
   int turn = 0;
+  std::string tempS;
   while (!done)
   {
+    turn += 1;
     std::cout << "==========================" << std::endl;
     std::cout << "Turn " << turn << "::::: " << std::endl;
     for (int i = 0; i < numPlayers; i++)
     {
+      tempS = players[i]->retName();
+      std::cout << "\t" << tempS << "'s TURN START" << "\n";
       playQuestion(players[i], numPlayers, questions, 1);
       if (players[i]->didWin()) {
         std::cout << "WINNER" << std::endl;
         done = 1;
         break;
       }
+      std::cout << "\t" << tempS << "'s TURN END" << "\n";
     }
-    turn += 1;
     displayGameStatus(players, numPlayers, turn);
   }
   return;
@@ -258,9 +262,9 @@ int main() {
   for (int i = 1; i <= numPlayers; i++) {
     players.push_back(new pObj(i));
   }
-  displayGameStatus(players, numPlayers, 3);
+  //displayGameStatus(players, numPlayers, 3);
    
-  displayGameStatus(players, numPlayers, 4);
+  //displayGameStatus(players, numPlayers, 4);
 
   qPool q;
   q.load();
