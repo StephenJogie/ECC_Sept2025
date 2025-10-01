@@ -86,8 +86,8 @@ public:
       std::cout << "QUESTION: " << "\n \n \n \n";
       std::cout << question[qDiff][qInd] << "\n" << "\n";
       question[3].push_back(question[qDiff][qInd]);
-      question[qDiff][qInd].pop_back();
-      qCnt[qDiff] -= 1;
+      question[qDiff].erase(question[qDiff].begin() + (qInd));
+      qCnt[qDiff] += -1;
       qCnt[3] += 1;
       return(question[3][qCnt[3] - 1]);
     }
@@ -248,6 +248,7 @@ void game(std::vector<pObj*> players, int numPlayers, qPool* questions)
       }
       std::cout << "\t" << tempS << "'s TURN END" << "\n";
     }
+
     displayGameStatus(players, numPlayers, turn);
   }
   return;
